@@ -1,0 +1,97 @@
+*{
+	margin: 0px;
+	padding: 0px;
+    box-sizing: border-box;
+    @font-face:{
+        font-family: "Barbie-font"; src: url('Bartex-Regular.ttf')
+    };
+    scroll-behavior: smooth;
+}
+header div{
+    float:left;
+}
+.wrapper{
+    display: flex;
+    flex-flow: row wrap;
+    text-align: center;
+}
+.wrapper>*{
+    padding:10px;
+    margin: 10px;
+    flex: 1 100%;
+    border-radius: 10px;
+}
+.header{
+    background-color: lightcoral;
+    height: 250px;
+}
+.footer{
+    background: lightgreen;
+    height: 250px;
+}
+.main {
+    text-align: left;
+    background: deepskyblue;
+    height: 300px;
+    font-size: 24px;
+}
+.leftSide{
+    background: gold;
+}
+
+.leftSide button {
+    margin-top: 10px;
+    font-size: 30px;
+    padding:  18px 48px;
+}
+.leftSide h1 {
+    font-size: 30px;
+    padding-bottom: 24px;
+}
+.leftSide li {
+    list-style-type: none;
+}
+.leftSide div {
+    display:none;
+}
+.leftSide li:hover{
+    /*jelenitse meg a tooltippet köszi :* */
+
+}
+.leftSide a {
+    font-size: 25px;
+    color:black;
+    text-decoration: none;
+    padding: 8px;
+    display: block;
+    align-items: center;
+}
+.leftSide a:hover{
+    background-color: #b6dff8;
+}
+.rightSide{
+    background: hotpink;
+}
+
+@media all and (min-width: 800px){
+    .main {
+        flex: 3;
+    }
+    .leftSide {
+        order: 1;
+    }
+    .rightSide {
+        order: 2;
+    }
+    .main {
+        order: 2;
+    }
+    .footer {
+        order: 4;
+    }
+}
+@media all and (min-width: 600px){
+    .side{
+        flex: 1;
+    }
+}
