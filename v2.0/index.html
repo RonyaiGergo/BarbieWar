@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang = "hu">
+<head>
+	<title>Barbie vs. Ken Amőba</title>
+	<meta charset = "utf-8">
+	<meta name="description" content="A klasszikus amőba játék Barbie vs Ken kivitelben"> 
+	<meta name="keywords" content="Barbie, Ken, amőba, játék">
+	<meta name="author" content="Bús Emese, Bordás Dóra, Rónyai Gergő">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" type="image/png" href="kepek/icon.png"/> <!--TODO-->
+	<link href="ttt.css" rel="stylesheet">
+</head>
+<body>
+    <div class="wrapper">
+        <header class="header">
+            <p id="mess">Ki fog nyerni?</p>
+            <!--Logo-->
+            <img src="barbie.jpg" alt="barbie" id="barbiepic">
+            <img src="ken.jpg" alt="ken" id="kenpic">
+        </header>
+        
+        <main class="main board" id="board">
+        </main>
+
+
+        <section class="side leftSide">
+            <h1>Játékmódok</h1>
+                <ul>
+                    <li><div class="tooltip"><a href="" class="normal">normál</a> <span class="tooltiptext">A normál mód: klasszikus amőba játékot indít> <!--TODO-->
+    </span></div></li>
+                    <li><div class="tooltip"><a href="" class="speedrun">speedrun</a> <span class="tooltiptext">A speedrun mód: <!--TODO-->
+    </span></div></li>
+                    <li><div class="tooltip"><a href="" class="extreme">extrém(képességek)</a> <span class="tooltiptext">Az extrém mód: <!--TODO-->
+    </span></div></li>
+                </ul>
+                <button onclick="gamestart(9)">Start</button>
+
+        </section>
+
+        <section class="side rightSide">
+            <h1>Ranglista</h1>
+        </section>
+
+        <footer class="footer">
+            <h1>Footer</h1>
+            <!--TODO:Social media linkek barbie oldalakhoz? About us vagy ilyesmi fülek?-->
+            </footer>
+    </div>
+
+    <script>
+        //külön function a divek generálásához ha nagyobb táblát akarunk csinálni
+        function generateDiv(indexSzam) {
+            var divek = document.createElement("div");
+            divek.className = "cell"; //adunk neki egy cell osztályt amivel css-ben divafikáljuk
+            divek.setAttribute("onclick","makeMove(" + indexSzam + ")"); //meg egy onclick attributumot
+            return divek; //maga a függvényt pedig ellehet igy tárolni egy értékként slay tök fun yay
+        }
+        
+
+
+        var kontener = document.getElementById("board");
+        let running = false;  // ha fut a játék, true
+        //csak ilyen baby indító, még semmilyen speed vagy akármit nem lehet állitani:(((
+        function gamestart(size) {
+                kontener.innerHTML = ""; //kitöröljük ha ujrakezdünk egy játékot
+                for (var i = 0; i < size; i++) { //itt feltöltjük 0-8 között 
+                    var div = generateDiv(i); //éppen mondta Jacob hogy Bella where the hell have you been loca?
+                    kontener.appendChild(div);
+                }
+            cells = document.querySelectorAll('.cell');
+            message.textContent = "Ki fog nyerni?";
+            running = true;
+                /* Itt dinamikusan beállítaná hogy a tábla mekkora, majd generálná a nyerő kombókat mert idk hogy 
+                kellene normálisan megnézni majd kilesz találva
+                board = Array(size * size).fill('');
+                console.log(board);
+                winningCombos = generateWinningCombos(size);*/
+        }
+
+
+/* Hát ez itt egy hosszú fos amit nagyon én sem értek segített a chatgpt is benne
+igazából legenerálja a nyerő kombinációkat a tábla méretétől függően viszont ez még nekem nem működött 
+szóval egyenlőre csak flopera van idk divak lehet megölöm magamat aAAAAXDDD
+        function generateWinningCombos(size) {
+            const combos = [];
+    // Rows
+    for (let i = 0; i < size; i++) {
+        const rowCombo = [];
+        for (let j = 0; j < size; j++) {
+            rowCombo.push(i * size + j);
+        }
+        combos.push(rowCombo);
+    }
+    // Columns
+    for (let i = 0; i < size; i++) {
+        const colCombo = [];
+        for (let j = 0; j < size; j++) {
+            colCombo.push(i + j * size);
+        }
+        combos.push(colCombo);
+    }
+    // Diagonals
+    const diagonal1 = [];
+    const diagonal2 = [];
+    for (let i = 0; i < size; i++) {
+        diagonal1.push(i * size + i);
+        diagonal2.push(i * size + (size - i - 1));
+    }
+    combos.push(diagonal1, diagonal2);
+    return combos;
+    console.log(combos);
+}*/ 
+
+
+
+
+
+        //alapvetően barbie-val kezd de majd beállitjuk másra
+        let currentPlayer = 'Barbie';
+        //ez a táblánkrip
+        let board = ['', '', '', '', '', '', '', '', ''];
+        //ezek meg egy mÁtRixBan vannak elrakva mert fancyk vagyunk<3
+        winningCombos = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
+    
+        
+        const kenp = document.getElementById('kenpic').src; //kijelöli a kenpic id-nak a 'src' tulajdonságát
+        const bpic = document.getElementById('barbiepic').src; //ugyanaz mint az efelettin
+        const message = document.getElementById('mess'); //ugye van egy message id amivel kiirjuk hogy ki nyert stb
+
+        //ezt ne is nézzétek elég messy rip XDDDDDDDDD  
+        
+        function makeMove(index) {
+            if (board[index] === '' && running == true) { //csak akkor engedi lerakni ha a board üres ÉS nincs még vége a játéknak 
+                board[index] = currentPlayer;
+                const picapp = document.createElement('img'); 
+                /* hát én nem tom hogy ezt egyszerűbben is meglehet e csinálni
+                de én létrehozok egy img nevű elemet amibe belerakom a barbie vagy ken képek src tulajdonságát 
+                majd ezt rakom bele a kijelölt board-ba
+                */
+                picapp.className = 'gamepic'; 
+                picapp.src = currentPlayer === 'Barbie' ? bpic : kenp; //itt csak kijelölöm hogy ha barbie van soron akkor ő ha nem akkor a másik kép lesz kijelölve
+                cells[index].appendChild(picapp); //itt pedig berakom a cellába
+               
+            }
+            if (checkWinner()) { //gondolom egyszerű, megnézi hogy nyertek e vagy holtverseny, ha nem akkor kiirja hogy ki következik
+                message.textContent = `${currentPlayer} nyert!`;
+                board = ['', '', '', '', '', '', '', '', ''];
+                running = false;
+            } 
+            else if (board.every(cell => cell !== '')) {
+                message.textContent = "Holtverseny divák";
+                running = false;
+            } 
+            else if (running == true)   { //ez az ág csak akkor fut le, ha a játék még nem lett megállítva
+                    currentPlayer = currentPlayer === 'Barbie' ? 'Ken' : 'Barbie';
+                    message.textContent = `${currentPlayer} következik`;
+                }
+            }
+
+
+        /* nah ebbe bele se megyek mert nagyon mélyen én sem értem
+        function makeMove(index) {
+    if (board[index] === '' && !checkWinner()) {
+        board[index] = currentPlayer;
+        const picapp = document.createElement('img');
+        picapp.className = 'gamepic';
+        picapp.src = currentPlayer === 'Barbie' ? bpic : kenp;
+        cells[index].appendChild(picapp);
+        if (checkWinner()) {
+            message.textContent = `${currentPlayer} wins!`;
+        } else if (board.every(cell => cell !== '')) {
+            message.textContent = "It's a tie!";
+        } else {
+            currentPlayer = currentPlayer === 'Barbie' ? 'Ken' : 'Barbie';
+            message.textContent = `${currentPlayer}'s turn`;
+        }
+    }
+}*/
+    
+        //ez csak átnézi hogy ha nem üres és mind a 3 winning kombóban ugyanolyan elem van slay tök fun
+        //bár a holtverseny még nem működik de ezzel nem volt kedvem foglalkozni éppen sorry divak<3
+        function checkWinner() {
+            for (let combo of winningCombos) {
+                if (board[combo[0]] !== '' && board[combo[0]] === board[combo[1]] && board[combo[1]] === board[combo[2]]) {
+                    return true;
+                    
+                }
+            }
+            return false;
+        }
+
+
+        /* ez ugye a dinamikus generateWinningCombo-val működne de nem műdökid soooo????
+        Fiesta, salsa, quinceañera, baila
+        Siente el ritmo, ponte a sonreír
+        Ven conmigo!!!!
+        function checkWinner() {
+    for (let combo of winningCombos) {
+        const symbol = board[combo[0]];
+        if (symbol !== '' && combo.every(index => board[index] === symbol)) {
+            return true;
+        }
+    }
+    return false;
+}*/
+    </script>
+</body>
+
+</html>
