@@ -32,7 +32,6 @@ header div{
 .main {
     text-align: left;
     background: deepskyblue;
-    height: 600px;
     font-size: 24px;
     padding-left: 15%;
 }
@@ -52,21 +51,64 @@ header div{
 .leftSide li {
     list-style-type: none;
 }
-.leftSide div {
-    display:none;
-}/*
-.leftSide li:hover{
-    jelenitse meg a tooltippet köszi :*
- } */
+
+.diva:hover {
+    background-color: deeppink;
+    color: #fff;
+}
+
+
+.tooltip {
+    text-align: center;
+    padding: 5px;
+    border-radius: 4px; 
+}
+
+.tooltip:hover {  /*majdnem jól működik:))))*/
+    background-color: deeppink;
+    color: #fff;
+    text-align: center;
+    padding: 5px;
+    border-radius: 4px; 
+ } 
 
 
 
-.board {
+.board3 {
+    height: 600px;
     display: grid;
     grid-template-columns: repeat(3, 100px);
     grid-template-rows: repeat(3, 100px);
     gap: 8px;
+    width: 100%;
+    padding: 80px;
+    justify-content: center;
+    
 }
+.board5 {
+    height: 600px;
+    display: grid;
+    grid-template-columns: repeat(5, 100px);
+    grid-template-rows: repeat(5, 100px);
+    gap: 8px;
+    width: 100%;
+    padding: 80px;
+    justify-content: center;
+    
+}
+.board6 {
+    height: 750px;
+    display: grid;
+    grid-template-columns: repeat(6, 100px);
+    grid-template-rows: repeat(6, 100px);
+    gap: 8px;
+    width: 100%;
+    padding: 80px;
+    justify-content: center;
+    
+}
+
+
 .cell {
     width: 100px;
     height: 100px;
@@ -76,6 +118,17 @@ header div{
     justify-content: center;
     cursor: pointer;
 }
+
+.rossz {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    border: 3px solid red;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
  #barbiepic{
     max-width: 100px;
     max-height: 100px;
@@ -107,6 +160,7 @@ header div{
 .leftSide a:hover{
     background-color: #b6dff8;
 }
+
 .rightSide{
     background: hotpink;
 }
