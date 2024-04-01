@@ -77,6 +77,25 @@ header div{
     border-radius: 4px; 
  } 
 
+.eltunteto {
+    display: none;
+}
+
+
+.cover {
+    height: 400px;
+    width: 100%;
+    padding: 20%;
+    background-color: rgba(133, 20, 20, 0.5);
+    justify-content: center;
+}
+
+.chooser {
+    float: left;
+    top: 20%;
+    left: auto;
+}
+
  .circle {
     position: absolute;
     top: 2%; /* Position at the top */
@@ -145,6 +164,7 @@ header div{
     animation-name: rossz;
     animation-duration: 1.5s;
 }
+
 @keyframes rossz {
     0% {
         border: 3px solid red;
@@ -174,6 +194,7 @@ header div{
     .gamepic {
         max-width: 90px;
         max-height: 90px;
+        gap: 10px;
     }
 
     .leftSide a {
