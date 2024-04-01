@@ -30,6 +30,7 @@ header div{
     height: 250px;
 }
 .main {
+    position: relative;
     text-align: left;
     background: deepskyblue;
     font-size: 24px;
@@ -56,7 +57,11 @@ header div{
     background-color: deeppink;
     color: #fff;
 }
-
+.rightSide button {
+    margin-top: 10px;
+    font-size: 30px;
+    padding: 18px 48px;
+}
 
 .tooltip {
     text-align: center;
@@ -64,7 +69,7 @@ header div{
     border-radius: 4px; 
 }
 
-.tooltip:hover {  /*majdnem jól működik:))))*/
+.tooltip:hover { 
     background-color: deeppink;
     color: #fff;
     text-align: center;
@@ -72,6 +77,16 @@ header div{
     border-radius: 4px; 
  } 
 
+ .circle {
+    position: absolute;
+    top: 2%; /* Position at the top */
+    right: 2%; /* Position at the right */
+    width: 30px;
+    height: 30px;
+    background-color: greenyellow;
+    color: red;
+    border-radius: 50%;
+  }
 
 
 .board3 {
@@ -123,50 +138,63 @@ header div{
     width: 100px;
     height: 100px;
     display: flex;
-    border: 3px solid red;
+    border: 3px solid whitesmoke;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    animation-name: rossz;
+    animation-duration: 1.5s;
 }
+@keyframes rossz {
+    0% {
+        border: 3px solid red;
+    }
 
- #barbiepic{
-    max-width: 100px;
-    max-height: 100px;
-    margin-right: 15px;
- }
- #kenpic{
-    max-width: 100px;
-    max-height: 100px;
- }
+    100% {
+        border: 3px solid whitesmoke;
+    } }
 
-#mess {
-    font-size: 55px;
-    text-align: center;
-    margin-bottom: 15px;
-} 
+    #barbiepic {
+        max-width: 100px;
+        max-height: 100px;
+        margin-right: 15px;
+    }
 
- .gamepic {
-    max-width: 90px;
-    max-height: 90px;
- }
-.leftSide a {
-    font-size: 25px;
-    color:black;
-    text-decoration: none;
-    padding: 8px;
-    display: block;
-    align-items: center;
-}
-.leftSide a:hover{
-    background-color: #b6dff8;
-}
+    #kenpic {
+        max-width: 100px;
+        max-height: 100px;
+    }
 
-.rightSide{
-    background: hotpink;
-}
+    #mess {
+        font-size: 55px;
+        text-align: center;
+        margin-bottom: 15px;
+    }
 
-@media all and (min-width: 800px){
-    .main {
+    .gamepic {
+        max-width: 90px;
+        max-height: 90px;
+    }
+
+    .leftSide a {
+        font-size: 25px;
+        color: black;
+        text-decoration: none;
+        padding: 8px;
+        display: block;
+        align-items: center;
+    }
+
+    .leftSide a:hover {
+        background-color: #b6dff8;
+    }
+
+    .rightSide {
+        background: hotpink;
+    }
+
+    @media all and (min-width: 800px) {
+        .main {
         flex: 3;
     }
     .leftSide {

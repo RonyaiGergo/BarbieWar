@@ -22,8 +22,8 @@
 
 
 
-        <main class="main" id="board">
-        </main>
+        <div class="main" id="board">
+        </div>
 
 
 
@@ -34,14 +34,14 @@
 
             </pre>
             <form id="difficultyForm">
-                <input type="radio" id="easy" name="difficulty" value=9 required>
-                <label for="easy">Kicsi</label><br>
+                <input type="radio" id="easy" name="difficulty" value=9 checked>
+                <label for="easy">Kicsi - 3x3</label><br>
         
                 <input type="radio" id="medium" name="difficulty" value=25>
-                <label for="medium">Közepes</label><br>
+                <label for="medium">Közepes - 5x5</label><br>
         
                 <input type="radio" id="hard" name="difficulty" value=36>
-                <label for="hard">Very Big D</label><br>
+                <label for="hard">Nagy - 6x6</label><br>
                 
                 <pre>
 
@@ -49,24 +49,33 @@
                 <h2>Gyorsaság</h2>
                 <pre>
 
+Ha gyorsítani akarnád</pre>
+                <pre>
+
                 </pre>
-                <input type="radio" id="k" name="speed" value=9 >
-                <label for="k">Lasúú</label><br>
-        
-                <input type="radio" id="k" name="speed" value=25>
-                <label for="k">Sétafika</label><br>
-        
-                <input type="radio" id="f" name="speed" value=36>
-                <label for="f">HajcsaddKurvwa!</label><br>
+                <input type="radio" id="slowSpeed" name="speed" value=6 >
+                <label for="slowSpeed">Lassú Játék</label><br>
+
+                <input type="radio" id="normalSpeed" name="speed" value=4 checked>
+                <label for="normalSpeed">Normál Játék</label><br>
+
+                <input type="radio" id="fastSpeed" name="speed" value=2>
+                <label for="fastSpeed">Gyors Játék</label><br>
                 <pre>
                     
                 </pre>
-                <button type="submit">Diva Gomb</button>
+                <button type="submit" id="startButton">Diva Gomb</button>
+                <button type="button" id="replayButton" disabled>Ujra</button>
             </form>
         </section>
 
         <section class="side rightSide">
             <h1>Ranglista</h1>
+            <h2>Barbie</h2>
+            <p id="barbieScoreCount">0</p> <br>
+            <h2>Ken</h2>
+            <p id="kenScoreCount">0</p>
+            <button onclick="resetScore()">Reset score</button>
         </section>
 
         <footer class="footer">
@@ -76,42 +85,69 @@
     </div>
 
     <script>
+        startButton = document.getElementById("startButton");
+        reButton = document.getElementById("replayButton");
+        var selectedSpeed;
+        var saved;
+
        document.getElementById("difficultyForm").addEventListener("submit", function(event) {
             event.preventDefault(); 
             
             const selectedDifficulty = document.querySelector('input[name="difficulty"]:checked');
+            selectedSpeed = document.querySelector('input[name="speed"]:checked').value;
+            saved = selectedSpeed;
             if (selectedDifficulty) {
                 ellenorzo(selectedDifficulty.value);
+                reButton.disabled = true;
+            } else {
+                alert("Nincs helyesen kitöltve a Form!");
+            }
+            resetScore();
+
+        });
+
+        reButton.addEventListener('click', function() {
+            const selectedDifficulty = document.querySelector('input[name="difficulty"]:checked');
+            selectedSpeed = document.querySelector('input[name="speed"]:checked').value;
+            saved = selectedSpeed;
+            if (selectedDifficulty) {
+                ellenorzo(selectedDifficulty.value);
+                reButton.disabled = true;
             } else {
                 alert("Nincs helyesen kitöltve a Form!");
             }
         });
 
 
+
+
+
         //itt kiválasztja milyen nagy legyen a cucc
         function ellenorzo(szam) {
             board = [];
-            if (szam === "9") {
-                board = Array(9).fill('');
-                winnerMoves(3);
-                kontener.classList = "main board3"; //ezeknél a css-t belehet állítani, a main az alap a board3-board5 cuccokkal extrázzuk
-                gamestart(9);
-            } 
-            else if (szam === "25") {
-                board = Array(25).fill('');
-                winnerMoves(5);
-                console.log(winningCombos);
-                kontener.className = "main board5";
-                gamestart(25);
-            } 
-            else if (szam === "36"){
-                board = Array(36).fill('');
-                winnerMoves(6);
-                kontener.className = "main board6";
-                gamestart(36);
-            }
-            else {
-                alert("Valami félrement a checkk-nél rip"); //ha félre megy valami kitépem a belsőszerveim és felgyujtom magam
+            switch (szam) {
+                case "9" :
+                    board = Array(9).fill('');
+                    winnerMoves(3); //ez a function ami beállítja 
+                    kontener.classList = "main board3"; //ezeknél a css-t belehet állítani (a main az alap) a board3-board5 cuccokkal extrázzuk
+                    gamestart(9);
+                    break;
+                case "25" :
+                    board = Array(25).fill('');
+                    winnerMoves(5);
+                    console.log(winningCombos);
+                    kontener.className = "main board5";
+                    gamestart(25);
+                    break;
+                case "36" :
+                    board = Array(36).fill('');
+                    winnerMoves(6);
+                    kontener.className = "main board6";
+                    gamestart(36);
+                    break;
+                default:
+                    alert("Valami a kiválaszásnál nem volt jó:(");
+                    break;
             }
         }
 
@@ -167,10 +203,16 @@ winningCombos.push(secondaryDiagonal);
 
         var kontener = document.getElementById("board");
         let running = false;  // ha fut a játék, true
+        let playerDisplay = document.getElementById("playerDisplay");
 
+        var secund = document.createElement("div");
+        secund.className = "circle";
+        var secundDisplay = document.createElement("p");
+        
 
         function gamestart(size) {//csak ilyen baby indító, még semmilyen speed vagy akármit nem lehet állitani:(((
-                kontener.innerHTML = ""; //kitöröljük ha ujrakezdünk egy játékot
+                kontener.innerHTML = "" //kitöröljük ha ujrakezdünk egy játékot
+                kontener.appendChild(secund);
                 board = ['', '', '', '', '', '', '', '', ''];
                 for (var i = 0; i < size; i++) {  //itt feltöltjük 0-8 között
                     var div = generateDiv(i);  //éppen mondta Jacob hogy Bella where the hell have you been loca?
@@ -179,11 +221,48 @@ winningCombos.push(secondaryDiagonal);
                 cells = document.querySelectorAll('.cell');
                 message.textContent = "Ki fog nyerni?";
                 running = true;
+                secund.appendChild(secundDisplay);
+                counter(secundDisplay);
                 console.log("A cucc létrehozva yay");
             }
 
-           
+            
 
+
+
+            let cunting;
+            let szam;
+            function counter(secundDisplay) {
+                clearInterval(cunting);
+                szam = selectedSpeed;
+                cunting = setInterval(function(){
+                    console.log(szam);
+                    szam--;
+                    secundDisplay.textContent = szam;
+                    if (szam < 2) {
+                        if (currentPlayer === 'Barbie') {currentPlayer = 'Ken';}
+                        else { currentPlayer = 'Barbie';}
+                        message.textContent = `${currentPlayer} következik`;
+                        szam = saved;
+                    }
+                },1000);
+            }
+
+
+        let barbieScore = 0; //scoreboardhoz
+        let kenScore = 0;
+
+        function resetScore() { //reset btn
+            barbieScore = 0; 
+            kenScore = 0;
+            barbieScoreCount.textContent = barbieScore;
+            kenScoreCount.textContent = kenScore
+        }
+
+        function updateScore(currentPlayer) {
+                if (currentPlayer === 'Barbie') {barbieScore++; barbieScoreCount.textContent = barbieScore}
+                else {kenScore++; kenScoreCount.textContent = kenScore}
+        }
 
         //alapvetően barbie-val kezd de majd beállitjuk másra
         let currentPlayer = 'Barbie';
@@ -196,6 +275,9 @@ winningCombos.push(secondaryDiagonal);
         const bpic = document.getElementById('barbiepic').src; //ugyanaz mint az efelettin
         const message = document.getElementById('mess'); //ugye van egy message id amivel kiirjuk hogy ki nyert stb
 
+
+
+        
         //ezt ne is nézzétek elég messy rip XDDDDDDDDD  
         
         function makeMove(index) {
@@ -222,11 +304,18 @@ winningCombos.push(secondaryDiagonal);
                 if (!checkFilled() && !checkWinner()) {
                     message.textContent = "Holtverseny divák";
                     running = false;
+                    reButton.disabled = false;
+                    clearInterval(cunting);
+                    secundDisplay.textContent = "";
                 } 
                 else if (checkWinner()) { //gondolom egyszerű, megnézi hogy nyertek e vagy holtverseny, ha nem akkor kiirja hogy ki következik
                     message.textContent = `${currentPlayer} nyert!`;
+                    updateScore(currentPlayer);
                     board = ['', '', '', '', '', '', '', '', ''];
                     running = false;
+                    reButton.disabled = false;
+                    clearInterval(cunting);
+                    secundDisplay.textContent = "";
                 }
                 else if (running == true && checkFilled() && !ugyanaz){
                     currentPlayer = currentPlayer === 'Barbie' ? 'Ken' : 'Barbie';
@@ -264,19 +353,8 @@ winningCombos.push(secondaryDiagonal);
         }
 
 
-        /* ez ugye a dinamikus generateWinningCombo-val működne de nem műdökid soooo????
-        Fiesta, salsa, quinceañera, baila
-        Siente el ritmo, ponte a sonreír
-        Ven conmigo!!!!
-        function checkWinner() {
-    for (let combo of winningCombos) {
-        const symbol = board[combo[0]];
-        if (symbol !== '' && combo.every(index => board[index] === symbol)) {
-            return true;
-        }
-    }
-    return false;
-}*/
+        
+
     </script>
 </body>
 
