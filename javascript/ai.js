@@ -29,9 +29,10 @@ document.getElementById("difficultyForm").addEventListener("submit", function(ev
 reButton.addEventListener('click', function() {
     const selectedDifficulty = document.querySelector('input[name="difficulty"]:checked');
     selectedSpeed = document.querySelector('input[name="speed"]:checked').value;
-    selectedDifficulty = parseInt(selectedDifficulty);
     saved = selectedSpeed;
     if (selectedDifficulty) {
+        board = [];
+        currentPlayer = humanPlayer;
         ellenorzo(selectedDifficulty.value);
         reButton.disabled = true;
     } else {
@@ -72,12 +73,10 @@ function choosePlayer(difficulty) {
     kontener.innerHTML = ""
     kontener.appendChild(cover);
     cover.appendChild(barbieChooser);
-
     
     cover.className = "cover";
     cover.classList.remove("eltunteto");
     cover.appendChild(kenChooser);
-    
 
     barbieChooser.addEventListener("click",function(){
         humanPlayer = 'Barbie';
@@ -85,7 +84,6 @@ function choosePlayer(difficulty) {
         currentPlayer = 'Barbie';
         cover.className = "eltunteto";
         ellenorzo(difficulty);
-        console.log(humanPlayer + " kiválasztva") ;
     });
     kenChooser.addEventListener("click",function(){
         humanPlayer = 'Ken';
@@ -93,7 +91,6 @@ function choosePlayer(difficulty) {
         currentPlayer = 'Ken';
         cover.className = "eltunteto";
         ellenorzo(difficulty);
-        console.log(humanPlayer + " kiválasztva");
     });
 }
 
@@ -102,10 +99,9 @@ function choosePlayer(difficulty) {
 
 //itt kiválasztja milyen nagy legyen a cucc
 function ellenorzo(szam) {
-    board = []; //kitisztítja a táblát
     switch (szam) { //szám méretétől függően hozza
         case "9":
-            board = Array(9).fill("");//a táblát feltöltjük 9 db helyel mert 3x3-as a mezőnk
+            board =  Array(9).fill('');//a táblát feltöltjük 9 db helyel mert 3x3-as a mezőnk
             winnerMoves(3); //ez a function ami beállítja a tábla méretéhez a nyerő kombókat a tábla méretétől függően
             kontener.classList = "main board3"; //ezeknél a css-t belehet állítani (a main az alap) a board3-board5 cuccokat
             gamestart(9);
@@ -113,7 +109,6 @@ function ellenorzo(szam) {
         case "25" :
             board = Array(25).fill('');
             winnerMoves(5);
-            console.log(winningCombos);
             kontener.className = "main board5";
             gamestart(25);
             break;
@@ -155,7 +150,6 @@ let cells;
 function gamestart(size) {//csak ilyen baby indító, még semmilyen speed vagy akármit nem lehet állitani:(((
         kontener.innerHTML = "" //kitöröljük ha ujrakezdünk egy játékot
         kontener.appendChild(secund);
-        board = Array(selectedDifficulty).fill('');
         for (var i = 0; i < size; i++) {  //itt feltöltjük 0-8 között
             var div = generateDiv(i);  //éppen mondta Jacob hogy Bella where the hell have you been loca?
             kontener.appendChild(div);
@@ -163,7 +157,6 @@ function gamestart(size) {//csak ilyen baby indító, még semmilyen speed vagy 
         cells = document.querySelectorAll('.cell');
         message.textContent = "Kiválasztva : " + humanPlayer;
         running = true;
-        console.log("A cucc létrehozva yay");
     }
 
 //ezt ne is nézzétek elég messy rip XDDDDDDDDD  
@@ -177,18 +170,28 @@ function makeMove(index) {
         ugyanaz = false;
     }
 
-    if (mehet && !ugyanaz) { 
+    if (mehet && !ugyanaz) {
+        currentPlayer = humanPlayer;
         board[index] = currentPlayer;
-        console.log(board + " kcuufuf");
         const picapp = document.createElement('img'); 
         picapp.className = 'gamepic'; 
         picapp.src = currentPlayer === 'Barbie' ? bpic : kenp; //itt csak kijelölöm hogy ha barbie van soron akkor ő ha nem akkor a másik kép lesz kijelölve
         cells[index].appendChild(picapp); //itt pedig berakom a cellába
         for (cel of cells) {cel.className = "cell";}
-       console.log("A lépés jó volt -> " + (index+1));
-       
+        
+        if (checkFilled() && !checkWinner()) {
+            aiNextMove();
+            if (checkWinner()) { 
+                message.textContent = `${currentPlayer} nyert!`;
+                updateScore(currentPlayer);
+                board = Array(selectedDifficulty).fill('');
+                running = false;
+                reButton.disabled = false;
+                secundDisplay.textContent = "";
+            }
+        } 
     }
-
+    
         if (!checkFilled() && !checkWinner()) {
             message.textContent = "Holtverseny divák";
             running = false;
@@ -205,18 +208,13 @@ function makeMove(index) {
             secundDisplay.textContent = "";
         }
 
-        else if (running == true && checkFilled() && !ugyanaz){
-            currentPlayer = humanPlayer;
-            message.textContent = `${currentPlayer} következik`;
-            aiNextMove();
-        }
-
         else if (ugyanaz) {
             message.textContent = `${currentPlayer} következik`;
-            console.log("Ez a lépés rossz volt -> " + (index+1));
             cells[index].className = 'rossz';
         }
+        
     }
+
 
 
 //ez csak átnézi hogy ha nem üres és mind a 3 winning kombóban ugyanolyan elem van slay tök fun
@@ -232,6 +230,7 @@ function checkWinner() { //nah ezt hajnalban agyaltam össze w3schoolal meg chat
     return null; 
 }
 
+
 function checkFilled() {
     for (let cellak of cells) {
         if (cellak.innerHTML === "") {
@@ -246,46 +245,80 @@ function checkFilled() {
 
 let empty;
 
-function aiNextMove() {
-    cells = document.querySelectorAll('.cell');
-    currentPlayer = aiPlayer;
-    let empty = -1;
-    for (let i = 0;i < board.length;i++) {
-        if (cells[i].innerHTML === "") {
-            empty = i;
-            console.log("Egy üres index megtalálva : "+ empty);
-            break;
-        } 
-    }
-    console.log(board + " <-- a tábla mielőtt beleraktad");
-    board[empty] = aiPlayer;
-    console.log(board + " <-- a tábla miután beleraktad");
-    const picapp = document.createElement('img'); 
-    picapp.className = 'gamepic'; 
-    picapp.src = aiPlayer === 'Barbie' ? bpic : kenp; //itt csak kijelölöm hogy ha barbie van soron akkor ő ha nem akkor a másik kép lesz kijelölve
-    cells[empty].appendChild(picapp);
-    for (cel of cells) {cel.className = "cell";}
-    console.log("A lépés jó volt -> " + (empty+1));
-    
-    console.log(currentPlayer +" a jelenlegi játékos mielőtt checkwinner van");
+let score = {
+   aiPlayer : 1,
+   humanPlayer : -1,
+   'tie' : 0
 
-    if (checkWinner()) { //gondolom egyszerű, megnézi hogy nyertek e vagy holtverseny, ha nem akkor kiirja hogy ki következik
-        message.textContent = `${currentPlayer} nyert!`;
-        updateScore(currentPlayer);
-        board = Array(selectedDifficulty).fill('');
-        running = false;
-        reButton.disabled = false;
-        secundDisplay.textContent = "";
-    } else {
-        currentPlayer = humanPlayer;
-        console.log(currentPlayer + " a jelenlegi játékos checkwinner után");
-    }
 }
 
 
 
 
+function minimax(board, depth, isMaximizing) {
+    const winner = checkWinner();
+    if (winner !== null) {
+        if (winner === aiPlayer) {
+            return 10 - depth;
+        } else if (winner === humanPlayer) {
+            return depth - 10;
+        } else {
+            return 0;
+        }
+    }
 
+    if (isMaximizing) {
+        let bestScore = -Infinity;
+        for (let i = 0; i < board.length; i++) {
+            if (board[i] === '') {
+                board[i] = aiPlayer;
+                const score = minimax(board, depth + 1, false);
+                board[i] = '';
+                bestScore = Math.max(score, bestScore);
+            }
+        }
+        return bestScore;
+    } else {
+        let bestScore = Infinity;
+        for (let i = 0; i < board.length; i++) {
+            if (board[i] === '') {
+                board[i] = humanPlayer;
+                const score = minimax(board, depth + 1, true);
+                board[i] = '';
+                bestScore = Math.min(score, bestScore);
+            }
+        }
+        return bestScore;
+    }
+}
+
+
+function aiNextMove() {
+    currentPlayer = aiPlayer;
+    let bestScore = -Infinity;
+    let move;
+
+    for (let i = 0; i < board.length; i++) {
+        if (board[i] === '') {
+            board[i] = aiPlayer;
+            const score = minimax(board, 0, false);
+            board[i] = '';
+            if (score > bestScore) {
+                bestScore = score;
+                move = i;
+            }
+        }
+    }
+    if (board[move] === '' && cells[move].innerHTML === "") {
+    board[move] = aiPlayer;
+    const picapp = document.createElement('img'); 
+    picapp.className = 'gamepic'; 
+    picapp.src = aiPlayer === 'Barbie' ? bpic : kenp; //itt csak kijelölöm hogy ha barbie van soron akkor ő ha nem akkor a másik kép lesz kijelölve
+    cells[move].appendChild(picapp);
+    for (cel of cells) {cel.className = "cell";}
+
+    }
+}
 
 
 
