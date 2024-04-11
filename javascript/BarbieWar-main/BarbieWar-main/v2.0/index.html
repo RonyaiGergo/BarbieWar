@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang = "hu">
+<head>
+	<title>Barbie vs. Ken Amőba</title>
+	<meta charset = "utf-8">
+	<meta name="description" content="A klasszikus amőba játék Barbie vs Ken kivitelben"> 
+	<meta name="keywords" content="Barbie, Ken, amőba, játék">
+	<meta name="author" content="Bús Emese, Bordás Dóra, Rónyai Gergő">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" type="image/png" href="kepek/icon.png"/> <!--TODO-->
+	<link href="ttt.css" rel="stylesheet">
+</head>
+<body>
+    <div class="wrapper">
+        <header class="header">
+            <p id="mess">Ki fog nyerni?</p>
+            <!--Logo-->
+            <img src="barbie.jpg" alt="barbie" id="barbiepic">
+            <img src="ken.png" alt="ken" id="kenpic">
+        </header>
+        
+
+
+
+        <main class="main" id="board">
+        </main>
+
+
+
+
+        <section class="side leftSide">
+            <h1>Játékmódok</h1>
+            <pre> Válassz és indulhat is!
+
+            </pre>
+            <form id="difficultyForm">
+                <input type="radio" id="easy" name="difficulty" value=9 required>
+                <label for="easy">Kicsi</label><br>
+        
+                <input type="radio" id="medium" name="difficulty" value=25>
+                <label for="medium">Közepes</label><br>
+        
+                <input type="radio" id="hard" name="difficulty" value=36>
+                <label for="hard">Very Big D</label><br>
+                
+                <pre>
+
+                </pre>
+                <h2>Gyorsaság</h2>
+                <pre>
+
+                </pre>
+                <input type="radio" id="k" name="speed" value=9 >
+                <label for="k">Lasúú</label><br>
+        
+                <input type="radio" id="k" name="speed" value=25>
+                <label for="k">Sétafika</label><br>
+        
+                <input type="radio" id="f" name="speed" value=36>
+                <label for="f">HajcsaddKurvwa!</label><br>
+                <pre>
+                    
+                </pre>
+                <button type="submit">Diva Gomb</button>
+            </form>
+        </section>
+
+        <section class="side rightSide">
+            <h1>Scoreboard</h1> <br>
+            <h2>Barbie</h2>
+            <p id="barbieScoreCount">0</p> <br>
+            <h2>Ken</h2>
+            <p id="kenScoreCount">0</p>
+            <button onclick="resetScore()">Reset score</button>
+        </section>
+
+        <footer class="footer">
+            <h1>Footer</h1>
+            <!--TODO:Social media linkek barbie oldalakhoz? About us vagy ilyesmi fülek?-->
+            </footer>
+    </div>
+
+    <script>
+       document.getElementById("difficultyForm").addEventListener("submit", function(event) {
+            event.preventDefault(); 
+            
+            const selectedDifficulty = document.querySelector('input[name="difficulty"]:checked');
+            if (selectedDifficulty) {
+                ellenorzo(selectedDifficulty.value);
+            } else {
+                alert("Nincs helyesen kitöltve a Form!");
+            }
+        });
+
+
+        //itt kiválasztja milyen nagy legyen a cucc
+        function ellenorzo(szam) {
+            board = [];
+            if (szam === "9") {
+                board = Array(9).fill('');
+                winnerMoves(3);
+                kontener.classList = "main board3"; //ezeknél a css-t belehet állítani, a main az alap a board3-board5 cuccokkal extrázzuk
+                gamestart(9);
+            } 
+            else if (szam === "25") {
+                board = Array(25).fill('');
+                winnerMoves(5);
+                console.log(winningCombos);
+                kontener.className = "main board5";
+                gamestart(25);
+            } 
+            else if (szam === "36"){
+                board = Array(36).fill('');
+                winnerMoves(6);
+                kontener.className = "main board6";
+                gamestart(36);
+            }
+            else {
+                alert("Valami félrement a checkk-nél rip"); //ha félre megy valami kitépem a belsőszerveim és felgyujtom magam
+            }
+        }
+
+
+
+        function winnerMoves(num){
+// Ezzel ne is foglalkozzatok nagyon elméletileg jó, ez csak legenerálja a nyerő kombinációkat, nem tudok a kombinációk tárolására jobb módot
+winningCombos = [];
+
+for (let i = 0; i < num; i++) {
+    const rowCombo = [];
+    for (let j = 0; j < num; j++) {
+        rowCombo.push(i * num + j);
+    }
+    winningCombos.push(rowCombo);
+}
+
+for (let i = 0; i < num; i++) {
+    const colCombo = [];
+    for (let j = 0; j < num; j++) {
+        colCombo.push(i + j * num);
+    }
+    winningCombos.push(colCombo);
+}
+
+const mainDiagonal = [];
+for (let i = 0; i < num; i++) {
+    mainDiagonal.push(i * num + i);
+}
+winningCombos.push(mainDiagonal);
+
+const secondaryDiagonal = [];
+for (let i = 0; i < num; i++) {
+    secondaryDiagonal.push(i * num + ((num-1) - i));
+}
+winningCombos.push(secondaryDiagonal);
+}
+
+
+
+
+
+
+        //külön function a divek generálásához ha nagyobb táblát akarunk csinálni
+        function generateDiv(indexSzam) {
+            var divek = document.createElement("div");
+            divek.className = "cell"; //adunk neki egy cell osztályt amivel css-ben divafikáljuk
+            divek.setAttribute("onclick","makeMove(" + indexSzam + ")"); //meg egy onclick attributumot
+            return divek; //maga a függvényt pedig ellehet igy tárolni egy értékként slay tök fun yay
+        }
+        
+
+
+        var kontener = document.getElementById("board");
+        let running = false;  // ha fut a játék, true
+
+
+        function gamestart(size) {//csak ilyen baby indító, még semmilyen speed vagy akármit nem lehet állitani:(((
+                kontener.innerHTML = ""; //kitöröljük ha ujrakezdünk egy játékot
+                board = ['', '', '', '', '', '', '', '', ''];
+                for (var i = 0; i < size; i++) {  //itt feltöltjük 0-8 között
+                    var div = generateDiv(i);  //éppen mondta Jacob hogy Bella where the hell have you been loca?
+                    kontener.appendChild(div);
+                }
+                cells = document.querySelectorAll('.cell');
+                message.textContent = "Ki fog nyerni?";
+                running = true;
+                console.log("A cucc létrehozva yay");
+            }
+
+           
+
+
+        //alapvetően barbie-val kezd de majd beállitjuk másra
+        let currentPlayer = 'Barbie';
+        //ez a táblánkrip
+        //ezek meg egy mÁtRixBan vannak elrakva mert fancyk vagyunk<3
+        
+    
+        
+        const kenp = document.getElementById('kenpic').src; //kijelöli a kenpic id-nak a 'src' tulajdonságát
+        const bpic = document.getElementById('barbiepic').src; //ugyanaz mint az efelettin
+        const message = document.getElementById('mess'); //ugye van egy message id amivel kiirjuk hogy ki nyert stb
+
+        //ezt ne is nézzétek elég messy rip XDDDDDDDDD  
+        
+        function makeMove(index) {
+            let mehet = !checkWinner() && running && checkFilled();
+            let ugyanaz = true;
+
+            if (cells[index].innerHTML === "") {
+                ugyanaz = false;
+            }
+            if (mehet && !ugyanaz) { 
+                board[index] = currentPlayer;
+                const picapp = document.createElement('img'); 
+                /* hát én nem tom hogy ezt egyszerűbben is meglehet e csinálni
+                de én létrehozok egy img nevű elemet amibe belerakom a barbie vagy ken képek src tulajdonságát 
+                majd ezt rakom bele a kijelölt board-ba
+                */
+                picapp.className = 'gamepic'; 
+                picapp.src = currentPlayer === 'Barbie' ? bpic : kenp; //itt csak kijelölöm hogy ha barbie van soron akkor ő ha nem akkor a másik kép lesz kijelölve
+                cells[index].appendChild(picapp); //itt pedig berakom a cellába
+                for (cel of cells) {cel.className = "cell";}
+               console.log("A lépés jó volt -> " + (index+1));
+            }
+
+                if (!checkFilled() && !checkWinner()) {
+                    message.textContent = "Holtverseny divák";
+                    running = false;
+                } 
+                else if (checkWinner()) { //gondolom egyszerű, megnézi hogy nyertek e vagy holtverseny, ha nem akkor kiirja hogy ki következik
+                    message.textContent = `${currentPlayer} nyert!`;
+                    board = ['', '', '', '', '', '', '', '', ''];
+                    running = false;
+                    if (currentPlayer === 'Barbie') { barbieScore++; barbieScoreCount.textContent = barbieScore }  //miért nem bír működni???
+                    else { kenScore++; kenScoreCount.textContent = kenScore }
+                    console.log(barbieScore);
+                    console.log(kenScore);
+                    
+                }
+                else if (running == true && checkFilled() && !ugyanaz){
+                    currentPlayer = currentPlayer === 'Barbie' ? 'Ken' : 'Barbie';
+                    message.textContent = `${currentPlayer} következik`;
+                }
+                else if (ugyanaz) {
+                    message.textContent = `${currentPlayer} következik`;
+                    console.log("Ez a lépés rossz volt -> " + (index+1));
+                    cells[index].className = 'rossz';
+               
+                }
+            }
+
+    
+        //ez csak átnézi hogy ha nem üres és mind a 3 winning kombóban ugyanolyan elem van slay tök fun
+        //bár a holtverseny még nem működik de ezzel nem volt kedvem foglalkozni éppen sorry divak<3
+        function checkWinner() { //nah ezt hajnalban agyaltam össze w3schoolal meg chatgpt-vel, nem tudom hogy perfekt e de jóez
+            for (const combo of winningCombos) {
+                const symbols = combo.map(index => board[index]);
+                const uniqueSymbols = new Set(symbols);
+                if (uniqueSymbols.size === 1 && symbols[0] !== '') {
+                    return symbols[0]; 
+                }
+        }
+            return null; 
+        }
+
+        function checkFilled() {
+            for (let cellak of cells) {
+                if (cellak.innerHTML === "") {
+                    return true;
+                    break;
+                }
+            }
+            return false;
+        }
+
+
+        /* ez ugye a dinamikus generateWinningCombo-val működne de nem műdökid soooo????
+        Fiesta, salsa, quinceañera, baila
+        Siente el ritmo, ponte a sonreír
+        Ven conmigo!!!!
+        function checkWinner() {
+    for (let combo of winningCombos) {
+        const symbol = board[combo[0]];
+        if (symbol !== '' && combo.every(index => board[index] === symbol)) {
+            return true;
+        }
+    }
+    return false;
+}*/
+
+        let barbieScore = 0; //scoreboardhoz
+        let kenScore = 0;
+
+        function resetScore() { //reset btn
+            barbieScore = 0; 
+            kenScore = 0;
+            barbieScoreCount.textContent = barbieScore;
+            kenScoreCount.textContent = kenScore
+        }
+      
+
+           
+       
+    </script>
+</body>
+
+</html>
