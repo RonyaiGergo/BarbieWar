@@ -1,92 +1,122 @@
 <!DOCTYPE html>
-<html lang = "hu">
+<html lang = "en">
 <head>
-	<title>Barbie vs. Ken Amőba</title>
+	<title>Barbie vs Ken Tic-Tac-Toe</title>
 	<meta charset = "utf-8">
-	<meta name="description" content="A klasszikus amőba játék Barbie vs Ken kivitelben"> 
-	<meta name="keywords" content="Barbie, Ken, amőba, játék">
+	<meta name="description" content="A very spicy Tic-Tac-Toe in a queer style"> 
+	<meta name="keywords" content="Barbie, Ken, Tic-Tac-Toe, Game,Mortal Kombat,">
 	<meta name="author" content="Bús Emese, Bordás Dóra, Rónyai Gergő">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="icon" type="image/png" href="kepek/icon.png"/> <!--TODO-->
 	<link href="ttt.css" rel="stylesheet">
 </head>
 <body>
-    <div class="wrapper">
+    <audio id="player1Sound" src="audio/finishher.m4a"></audio>
+    <audio id="player2Sound" src="audio/finishhim.mp3"></audio>
+    <audio id="mortalTheme" src="audio/MORTAKOMBAT.m4a"></audio>
+    <audio id="insultAudio"></audio>
+
+<div class="bigdiv">  
+        <!--Beraktam mindent egy nagy divbe ahol flex-direction: column van
+        így a header-wrapper-footer egymás alatt van
+        a wrapperben pedig minden egymás melett van mert ott row wrap van
+        hope that help! -->
         <header class="header">
-            <p id="mess">Ki fog nyerni?</p>
-            <!--Logo-->
-            <img src="barbie.jpg" alt="barbie" id="barbiepic">
-            <img src="ken.png" alt="ken" id="kenpic">
+            <img src="kepek/barbie.jpg" alt="barbie" id="barbiepic">
+            <img src="kepek/ken.PNG" alt="ken" id="kenpic">
+            <p id="atee"> THE VERY FIRST SIN WAS A WOMAN WHO ATE!</p>
         </header>
 
-        <div class="main" id="board">
-        </div>
+        <div class="wrapper">
+            <div class="main" id="board">
+            </div>
 
-        <section class="side leftSide">
-            <h1>Játékmódok</h1>
-            <pre> Válassz és indulhat is!
-
+        <section class="side leftSide" id="leftSide">  <!--Please emese help us save us töröld ki a pre cuccokat 
+                                            PRESIDENT TRUMP PLEASE SAVE US (ha nem ismered a memet guglizd ki tbh fun)-->
+            <h1>Game mechanics</h1>
+            <pre> Choose your gamestyle
+First select the size
             </pre>
+
             <form id="difficultyForm">
                 <input type="radio" id="easy" name="difficulty" value=9 checked>
-                <label for="easy">Kicsi - 3x3</label><br>
+                <label for="easy">Small - 3x3</label><br>
         
                 <input type="radio" id="medium" name="difficulty" value=25>
-                <label for="medium">Közepes - 5x5</label><br>
+                <label for="medium">Medium - 5x5</label><br>
         
                 <input type="radio" id="hard" name="difficulty" value=36>
-                <label for="hard">Nagy - 6x6</label><br>
+                <label for="hard">Large - 6x6</label><br>
                 
                 <pre>
 
                 </pre>
-                <h2>Gyorsaság</h2>
+                <h2>Speed</h2>
                 <pre>
 
-Ha gyorsítani akarnád</pre>
+If you want a challenge
+play faster</pre>
                 <pre>
 
                 </pre>
-                <input type="radio" id="slowSpeed" name="speed" value=6 >
-                <label for="slowSpeed">Lassú Játék</label><br>
+                <input type="radio" id="slowSpeed" name="speed" value=60 >
+                <label for="slowSpeed">Slow Game (60 sec)</label><br>
 
-                <input type="radio" id="normalSpeed" name="speed" value=4 checked>
-                <label for="normalSpeed">Normál Játék</label><br>
+                <input type="radio" id="normalSpeed" name="speed" value=10 checked>
+                <label for="normalSpeed">Normal Game (10 sec)</label><br>
 
-                <input type="radio" id="fastSpeed" name="speed" value=2>
-                <label for="fastSpeed">Gyors Játék</label><br>
+                <input type="radio" id="fastSpeed" name="speed" value=3>
+                <label for="fastSpeed">Fast Game (3 sec)</label><br>
                 <pre>
-                    
+
                 </pre>
-                <button type="submit" id="startButton">Új Játék indítás</button>
-                <button type="button" id="replayButton" disabled>Új kör</button>
+                <h2>Enemy</h2>
+                <pre>
+
+When you're lonely
+play against AI</pre>
+<pre>
+
+</pre>
+                <input type="radio" id="humanGame" name="aiChooser" value=1 checked>
+                <label for="humanGame">Against Human</label><br>       
+                <input type="radio" id="aiGame" name="aiChooser" value=2>
+                <label for="aiGame">Against AI</label><br>
+                <pre>
+
+                </pre>
+                <button type="submit" id="startButton">Start New Game</button>
             </form>
         </section>
 
-        <section class="side rightSide">
-            <h1>Ranglista</h1>
+        <section class="side rightSide" id="scoreBoard">
+            <h1>Scoreboard</h1>
             <h2>Barbie</h2>
             <p id="barbieScoreCount">0</p> <br>
             <h2>Ken</h2>
             <p id="kenScoreCount">0</p>
+            <p id="mess">Who will win?</p>
+            <button type="button" id="replayButton" disabled>Next Round</button>
+            <button type="button" id="FormBack">Start Over</button>
+            
         </section>
+    </div>  <!--Itt a wrappert zárjuk le-->
 
         <footer class="footer">
             <h1>Footer</h1>
-            <!--TODO:Social media linkek barbie oldalakhoz? About us vagy ilyesmi fülek?-->
+            <!--TODO:Elég ha csinálsz nekem gombokat amivel ki be lehet kapcsolni a zenéket,
+            a logikát megoldom, viszont elég ha készítesz egy bool változót és akárhol lefut a muzsika ott csak rakj egy if statement-->
             </footer>
-    </div>
-
-  <script src="javascript/game.js"></script>
+</div>  <!--Itt a kreatív nevü bigdiv vége ez az egész html bodynk-->
+        
+   <script src="javascript/game.js"></script>
    <script src="javascript/main.js"></script>
    <script src="javascript/winningmoves.js"></script>
    <script src="javascript/scoreboard.js"></script>
    <script src="javascript/gameplaylogic.js"></script>
    <script src="javascript/gamecounter.js"></script> 
-  <!-- Ezt majd valahogy megoldjuk hogy az ai csak akkor induljon el ha az ellen játszik hm <3   
-    <script src="javascript/ai.js"></script>-->
-  
+   <script src="javascript/ai-smallerversion.js"></script> 
+   <script src="javascript/audio.js"></script>
 
 </body>
-
 </html>

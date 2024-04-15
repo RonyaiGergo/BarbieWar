@@ -6,9 +6,7 @@
     let barbieChooser = document.createElement("div");
     let kenChooser = document.createElement("div");
 
-    const bb = createImage("gamepic",document.getElementById('barbiepic').src);
-    const kk = createImage("gamepic",document.getElementById('kenpic').src);
-
+    
     function createImage(classs, src) {
         const img = document.createElement('img');
         img.src = src;
@@ -16,32 +14,73 @@
         return img;
     }
 
+    const bb = createImage("gamepic",document.getElementById('barbiepic').src);
+    const kk = createImage("gamepic",document.getElementById('kenpic').src);
     barbieChooser.appendChild(bb);
     kenChooser.appendChild(kk);
     
+
+    const nameForm = document.createElement('form');
+
+    const barbieNameInput = document.createElement('input');
+    const kenNameInput = document.createElement('input');
+    barbieNameInput.setAttribute('id','barbieNameValue');
+    const barbieLabel = document.createElement('label');
+
+    barbieLabel.innerHTML = "Barbie's name";
+    const kenLabel = document.createElement('label');
+    kenNameInput.setAttribute('id','kenNameValue');
+    kenLabel.innerHTML = "Ken's name";
+
+    const nameFormSubmitter = document.createElement('button');
+    nameFormSubmitter.setAttribute('type','submit');
+    nameFormSubmitter.innerHTML = "Start your game!";
+    var barbieName;
+    var kenName;
+
+    nameForm.appendChild(barbieNameInput);
+    nameForm.appendChild(barbieLabel);
+    nameForm.appendChild(kenNameInput);
+    nameForm.appendChild(kenLabel);
+    nameForm.appendChild(nameFormSubmitter);
+    const inputRegex = /\w{3}/;
+    var namesAreDifferent = false;
     
+    nameForm.addEventListener('submit',function(event){
+        event.preventDefault();
+        if (inputRegex.test(barbieNameInput.value) && inputRegex.test(kenNameInput.value)) {
+        barbieName = barbieNameInput.value;
+        kenName = kenNameInput.value;
+        cover.removeChild(nameForm);
+        barbieLabel.innerHTML = "You named your barbie: " + barbieName;
+        kenLabel.innerHTML = "You named your ken: " + kenName;
+        cover.appendChild(barbieLabel);
+        cover.appendChild(kenLabel);
+        namesAreDifferent = true;
+        } else { alert('Your name input was wrong!\nEach name should be at least 3 words long!')}  
+    })
 
 function choosePlayer(difficulty) {
     kontener.innerHTML = ""
     kontener.appendChild(cover);
-    cover.appendChild(barbieChooser);
-
-    
+   
     cover.className = "cover";
-    cover.classList.remove("eltunteto");
+    cover.classList.remove("eltunteto"); 
+    cover.appendChild(barbieChooser);
     cover.appendChild(kenChooser);
-    
-    console.log(cover);
-    
+    cover.appendChild(nameForm);
 
     barbieChooser.addEventListener("click",function(){
         currentPlayer = 'Barbie';
+        playerOne = 'Barbie';
+        playerTwo = 'Ken';
         cover.className = "eltunteto";
         ellenorzo(difficulty);
-        console.log("barbieef");
     });
     kenChooser.addEventListener("click",function(){
         currentPlayer = 'Ken';
+        playerOne = 'Ken';
+        playerTwo = 'Barbie';
         cover.className = "eltunteto";
         ellenorzo(difficulty);
     });
@@ -77,6 +116,11 @@ function ellenorzo(szam) {
             alert("Valami a kiválaszásnál nem volt jó:(");
             break;
     }
+    if (!namesAreDifferent) {
+        barbieName = 'Barbie';
+        kenName = 'Ken';
+    }
+    message.textContent = "Choosen : " + `${currentPlayer === 'Barbie' ? `${barbieName}!` : `${kenName}!`}`;
 }
 
 
@@ -97,9 +141,9 @@ let running = false;  // ha fut a játék, true
 let playerDisplay = document.getElementById("playerDisplay");
 
 var secund = document.createElement("div");
-secund.className = "circle";
+    secund.className = "circle";
 var secundDisplay = document.createElement("p");
-
+let cells;
 
 function gamestart(size) {//csak ilyen baby indító, még semmilyen speed vagy akármit nem lehet állitani:(((
         kontener.innerHTML = "" //kitöröljük ha ujrakezdünk egy játékot
@@ -110,9 +154,22 @@ function gamestart(size) {//csak ilyen baby indító, még semmilyen speed vagy 
             kontener.appendChild(div);
         }
         cells = document.querySelectorAll('.cell');
-        message.textContent = "Kiválasztva : " + currentPlayer;
         running = true;
         secund.appendChild(secundDisplay);
         counter(secundDisplay);
-        console.log("A cucc létrehozva yay");
+        boardColorChanger();
+        humanPlayer = playerOne;
+        aiPlayer = playerTwo;
+        mainTheme.play();
+        document.getElementById('scoreBoard').classList.remove('eltunteto');
+        document.getElementById("leftSide").classList.add('eltunteto');
     }
+
+
+function boardColorChanger() {
+    if (currentPlayer === 'Barbie') 
+        {kontener.classList.remove('kenboard'); kontener.classList.add('barbieboard')} 
+    else if (currentPlayer === 'Ken') 
+        {kontener.classList.remove('barbieboard'); kontener.classList.add('kenboard')}
+        
+}

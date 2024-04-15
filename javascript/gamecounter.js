@@ -9,9 +9,9 @@ a clearInterval pedig törli a setIntervalt azaz ezzel meglehet szakítani
 
 
 let count; //kívül definiáljuk hogy máshol is elérjék
-    let szam; //same here
+let szam; //same here
 
-    function counter(secundDisplay) {
+function counter(secundDisplay) {
         clearInterval(count);
 
         szam = selectedSpeed;
@@ -20,12 +20,16 @@ let count; //kívül definiáljuk hogy máshol is elérjék
                 console.log(szam);
                 szam--;
                 secundDisplay.textContent = szam;
-                if (szam < 2) {
-                    if (currentPlayer === 'Barbie') {currentPlayer = 'Ken';}
-                    else { currentPlayer = 'Barbie';}
-                    message.textContent = `${currentPlayer} következik`;
-                    szam = saved;
-                }
-            },1000);
+                if (szam == 0) {
+                    currentPlayer = currentPlayer === 'Barbie' ? 'Ken' : 'Barbie';
+                    message.textContent = currentPlayer + " nyert!";
+                    updateScore(currentPlayer);
+                    reButton.disabled = false;
+                    running = false;
+                    clearInterval(count);
+                    }
+            },975);
         }
-    }
+}
+
+

@@ -6,6 +6,18 @@
         font-family: "Barbie-font"; src: url('Bartex-Regular.ttf')
     };
     scroll-behavior: smooth;
+    color: whitesmoke;
+    text-shadow: 0 0 3px #FF0000, 0 0 5px #0000FF;
+}
+* button {
+    background-color: darkorchid;
+    border-radius: 10px;
+    border-color: rgba(133, 20, 20, 0.5);
+    margin: 2%;
+}
+body {
+    background-image: linear-gradient(rgb(120, 2, 2),rgb(143, 43, 0));
+    background-color: rgba(133, 20, 20, 0.5);
 }
 header div{
     float:left;
@@ -18,26 +30,44 @@ header div{
 .wrapper>*{
     padding:10px;
     margin: 10px;
-    flex: 1 100%;
     border-radius: 10px;
 }
 .header{
     background-color: lightcoral;
-    height: 250px;
+    height: 200px;
 }
 .footer{
+    flex-direction: column;
+    flex: auto;
     background: lightgreen;
-    height: 250px;
+    height: 200px;
+}
+.bigdiv {
+    flex-direction: column;
+    text-align: center;
+} 
+.bigdiv>*{
+    margin: 25px;
 }
 .main {
+    padding-top: 15%;
+    justify-content: center;
     position: relative;
     text-align: left;
-    background: deepskyblue;
+    background-image: url('kepek/source.gif');
+    background-size:cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 85%;
     font-size: 24px;
-    padding-left: 15%;
 }
 .leftSide{
-    background: gold;
+    background:  rgb(75, 0, 92);
+}
+.rightSide {
+    background-image: url('kepek/kkda.jpg');
+    opacity: 70%;
+    background-size: cover;
 }
 
 .leftSide button {
@@ -102,14 +132,24 @@ header div{
     right: 2%; /* Position at the right */
     width: 30px;
     height: 30px;
-    background-color: greenyellow;
+    background-color: rgba(106, 5, 57, 0.5);
     color: red;
     border-radius: 50%;
   }
 
+  .kenboard {
+    background-color: skyblue;
+  }
+  .barbieboard {
+    background-color: palevioletred;
+  }
 
+#atee {
+    margin-top: 30px;
+    font-size: 50px;
+}
 .board3 {
-    height: 600px;
+    height: 800px;
     display: grid;
     grid-template-columns: repeat(3, 100px);
     grid-template-rows: repeat(3, 100px);
@@ -120,7 +160,7 @@ header div{
     
 }
 .board5 {
-    height: 600px;
+    height: 800px;
     display: grid;
     grid-template-columns: repeat(5, 100px);
     grid-template-rows: repeat(5, 100px);
@@ -131,7 +171,7 @@ header div{
     
 }
 .board6 {
-    height: 750px;
+    height: 800px;
     display: grid;
     grid-template-columns: repeat(6, 100px);
     grid-template-rows: repeat(6, 100px);
@@ -172,7 +212,7 @@ header div{
 
     100% {
         border: 3px solid whitesmoke;
-    } }
+} }
 
     #barbiepic {
         max-width: 100px;
@@ -210,21 +250,17 @@ header div{
         background-color: #b6dff8;
     }
 
-    .rightSide {
-        background: hotpink;
-    }
-
     @media all and (min-width: 800px) {
         .main {
-        flex: 3;
+        flex: 7;
+        order: 2;
     }
     .leftSide {
+        flex: 1;
         order: 1;
     }
     .rightSide {
-        order: 2;
-    }
-    .main {
+        flex: 1;
         order: 2;
     }
     .footer {

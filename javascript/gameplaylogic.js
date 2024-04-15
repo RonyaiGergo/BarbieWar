@@ -2,11 +2,13 @@
 A gameplaylogic a játékhoz tartozó logikákat tartalmazza
 */
 let currentPlayer;
+let playerOne;
+let playerTwo;
+let humanPlayer;
+let aiPlayer;
 const kenp = document.getElementById('kenpic').src; //kijelöli a kenpic id-nak a 'src' tulajdonságát
 const bpic = document.getElementById('barbiepic').src; //ugyanaz mint az efelettin
 const message = document.getElementById('mess'); //ugye van egy message id amivel kiirjuk hogy ki nyert stb
-
-
 
 
 //ezt ne is nézzétek elég messy rip XDDDDDDDDD  
@@ -19,6 +21,7 @@ function makeMove(index) {
         ugyanaz = false;
     }
     if (mehet && !ugyanaz) { 
+        counter(secundDisplay);
         board[index] = currentPlayer;
         const picapp = document.createElement('img'); 
         /* hát én nem tom hogy ezt egyszerűbben is meglehet e csinálni
@@ -29,36 +32,64 @@ function makeMove(index) {
         picapp.src = currentPlayer === 'Barbie' ? bpic : kenp; //itt csak kijelölöm hogy ha barbie van soron akkor ő ha nem akkor a másik kép lesz kijelölve
         cells[index].appendChild(picapp); //itt pedig berakom a cellába
         for (cel of cells) {cel.className = "cell";}
-       console.log("A lépés jó volt -> " + (index+1));
+
+       if (aiChoosen && mehet) {
+        aiNextMove();
+        currentPlayer = humanPlayer;
+        playSoundEffect(currentPlayer);
+        boardColorChanger(); 
+        }
     }
 
         if (!checkFilled() && !checkWinner()) {
-            message.textContent = "Holtverseny divák";
+            mainTheme.pause()
+            message.textContent = "Stalemate losers!";
             running = false;
             reButton.disabled = false;
+            formBackButton.disabled = false;
             clearInterval(count);
             secundDisplay.textContent = "";
         } 
-        else if (checkWinner()) { //gondolom egyszerű, megnézi hogy nyertek e vagy holtverseny, ha nem akkor kiirja hogy ki következik
-            message.textContent = `${currentPlayer} nyert!`;
+        else if (checkWinner()) { 
+            mainTheme.pause()
+            mainTheme.currentTime = 0;
+            message.textContent = `${currentPlayer === 'Barbie' ? `${barbieName} finished him!` : `${kenName} finished her!`}`;
+            winner = currentPlayer
             updateScore(currentPlayer);
             board = ['', '', '', '', '', '', '', '', ''];
             running = false;
             reButton.disabled = false;
+            formBackButton.disabled = false;
             clearInterval(count);
             secundDisplay.textContent = "";
+            randomEndSound(winner);
         }
-        else if (running == true && checkFilled() && !ugyanaz){
+        else if (running == true && checkFilled() && !ugyanaz && !aiChoosen){
             currentPlayer = currentPlayer === 'Barbie' ? 'Ken' : 'Barbie';
-            message.textContent = `${currentPlayer} következik`;
+            message.textContent = finishThem(currentPlayer);
+            playSoundEffect(currentPlayer);
+            boardColorChanger();    
         }
         else if (ugyanaz) {
-            message.textContent = `${currentPlayer} következik`;
+            message.textContent = finishThem(currentPlayer);
             console.log("Ez a lépés rossz volt -> " + (index+1));
             cells[index].className = 'rossz';
         }
     }
 
+    function finishThem(player) {
+        if (namesAreDifferent) {
+            if (player === 'Barbie') {
+                return  `Finish him ${barbieName}!`;
+            } else {
+                return `Finish her ${kenName}!`;
+            }
+        }
+        else { 
+            if (player === 'Barbie') {
+                return `Finish him ${barbieName}!`;} 
+            else {return `Finish her ${kenName}!`;}}
+    }
 
 //ez csak átnézi hogy ha nem üres és mind a 3 winning kombóban ugyanolyan elem van slay tök fun
 //bár a holtverseny még nem működik de ezzel nem volt kedvem foglalkozni éppen sorry divak<3
@@ -77,7 +108,6 @@ function checkFilled() {
     for (let cellak of cells) {
         if (cellak.innerHTML === "") {
             return true;
-            break;
         }
     }
     return false;
