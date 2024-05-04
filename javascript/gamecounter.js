@@ -16,8 +16,7 @@ function counter(secundDisplay) {
 
         szam = selectedSpeed;
         if (running) {
-            count = setInterval(function(){ 
-                console.log(szam);
+            count = setInterval(function(){
                 szam--;
                 secundDisplay.textContent = szam;
                 if (szam == 0) {

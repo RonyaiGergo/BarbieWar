@@ -1,27 +1,120 @@
+/*
+színek:
+#F8C9EB -- MUTED COLD PINK
+#8BD2F1 -- KÉK
+#F8E4E2 -- SÁRGA
+#FE9DD0 -- PINK
+#EB78B8 -- SÖTÉT PINK
+*/
+.popup{
+    z-index: 21;
+    background-color: #ffffff;
+    width: 450px;
+    padding: 30px 40px;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    left: 50%;
+    top: 50%;
+    border-radius: 8px;
+    font-family: "Poppins",sans-serif;
+    display: none;
+    text-align: center;
+    position: sticky;
+}
+
+.popup button{
+    display: inline;
+    background-color: transparent;
+    font-size: 100px;
+    color: #c5c5c5;
+    top: -10px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+
+}
+.popup p{
+    font-size: 25px;
+    text-align: center;
+    margin: 20px 0;
+    line-height: 25px;
+}
 *{
 	margin: 0px;
 	padding: 0px;
-    box-sizing: border-box;
-    @font-face:{
-        font-family: "Barbie-font"; src: url('Bartex-Regular.ttf')
-    };
-    scroll-behavior: smooth;
-    color: whitesmoke;
-    text-shadow: 0 0 3px #FF0000, 0 0 5px #0000FF;
+	box-sizing: border-box;
+	font-family: 'Antonio', sans-serif;
+	scroll-behavior: smooth;
+	color: whitesmoke;
+	text-shadow: 0 0 3px #FF0000, 0 0 5px #EB78B8;
 }
 * button {
-    background-color: darkorchid;
+    background-color: #ffc2df;
     border-radius: 10px;
     border-color: rgba(133, 20, 20, 0.5);
+    text-size-adjust: 10%;
     margin: 2%;
 }
 body {
-    background-image: linear-gradient(rgb(120, 2, 2),rgb(143, 43, 0));
-    background-color: rgba(133, 20, 20, 0.5);
+    /*background-image: linear-gradient(rgb(120, 2, 2),rgb(143, 43, 0));
+    background-color: rgba(133, 20, 20, 0.5);*/
+    background-color: #8BD2F1;
 }
+
+#karakterv {
+    background-color: #FE9DD0;
+}
+
+
+
+
 header div{
     float:left;
 }
+
+
+#difficultyForm > h2 {
+    text-decoration: underline;
+}
+section > h2{
+    text-decoration: underline;
+}
+.footer>h1 { /* megigazítja a h1et*/
+    text-align: center;
+    margin-bottom: 2%;
+    margin-top: 2%;
+
+}
+.footer{
+    border-radius: 10px;
+    flex-direction: row;
+    flex: auto;
+    background: #FE9DD0;
+    height: fit-content;
+    padding-bottom:2%;
+    overflow:auto;
+    
+}
+#btn { /*oldalnémító button*/
+    position: absolute;
+    transition: right 0.99s ease, top 0.99s ease;
+    padding: 10px;
+    height: 40px;
+    width: 150px;
+
+}
+
+#difficultyForm > h2{
+    margin-top: 30%;
+}
+#difficultyForm > p, .terkozolni{
+    margin-bottom : 10%;
+}
+header > img, p {
+    margin-top: 1%;
+}
+
+
 .wrapper{
     display: flex;
     flex-flow: row wrap;
@@ -33,23 +126,20 @@ header div{
     border-radius: 10px;
 }
 .header{
-    background-color: lightcoral;
-    height: 200px;
+    border-radius: 10px;
+    background-image: url(kepek/pinky_heart_header.jfif);
+    height: fit-content;
 }
-.footer{
-    flex-direction: column;
-    flex: auto;
-    background: lightgreen;
-    height: 200px;
-}
+
 .bigdiv {
-    flex-direction: column;
+    /* flex-direction: column; */
     text-align: center;
 } 
 .bigdiv>*{
     margin: 25px;
 }
 .main {
+    border-radius: 10px;
     padding-top: 15%;
     justify-content: center;
     position: relative;
@@ -62,7 +152,7 @@ header div{
     font-size: 24px;
 }
 .leftSide{
-    background:  rgb(75, 0, 92);
+    background: #EB78B8;
 }
 .rightSide {
     background-image: url('kepek/kkda.jpg');
@@ -93,50 +183,175 @@ header div{
     padding: 18px 48px;
 }
 
-.tooltip {
-    text-align: center;
-    padding: 5px;
-    border-radius: 4px; 
+
+#tableTooltip {
+    bottom: 25px;
+    position: relative;
+    left: 50px;
+}
+#aiTooltip {
+    bottom: 25px;
+    position: relative;
+    left: 58px;
 }
 
-.tooltip:hover { 
-    background-color: deeppink;
-    color: #fff;
-    text-align: center;
-    padding: 5px;
-    border-radius: 4px; 
- } 
+#speedTooltip {
+    bottom: 25px;
+    position: relative;
+    left: 60px;
+}
 
+.tooltip {
+    border: 1px solid #F8C9EB;
+    background: #e75aa3;
+    padding: 5px 12px;
+    margin: 5px;
+    font-size: 15px;
+    border-radius: 100%;
+    color: #FFF;
+  }
+  
+  .tooltip:before,
+  .tooltip:after {
+    position: absolute;
+    content: '';
+    opacity: 0;
+    transition: all 0.4s ease;
+  }
+
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400');
+
+  .tooltip:before {
+    border-width: 10px 8px 0 8px;
+    border-style: solid;
+    border-color: #e75aa3 transparent transparent transparent;
+    top: -15px;
+     transform: translateY(20px);
+  }
+  
+  .tooltip:after {
+    content: attr(data-tooltip);
+    background: #e75aa3;
+    width: fit-content;
+    height: fit-content;
+    font-size: 13px;
+    font-weight: 300;
+    top: -75px;
+    left: -10px;
+    padding: 10px;
+    border-radius: 5px;
+    letter-spacing: 1px;
+    transform: translateY(20px);
+  }
+  
+  .tooltip:hover::before,
+  .tooltip:hover::after {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+  
+  @keyframes shake {
+    0% { 
+      transform: rotate(2deg);
+    }
+    50% {
+     transform: rotate(-3deg);
+    }
+    70% {
+      transform: rotate(3deg);
+    }
+  
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+  
+  .anim:hover {
+    animation: shake 500ms ease-in-out forwards;
+  }
+  
 .eltunteto {
     display: none;
 }
 
-
 .cover {
-    height: 400px;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    padding: 20%;
-    background-color: rgba(133, 20, 20, 0.5);
+    height: 100%;
+    background-color: #F8C9EB;
     justify-content: center;
 }
 
-.chooser {
+#karakterHead {
+    font-size: xx-large;
+    height: fit-content;
+    width: 100%;
+    padding: 10%;
+    text-align: center;
+}
+
+#karakterMain {
+    display: flex;
+    flex-direction: row;
     float: left;
+    width: 100%;
+    height: 75%;
+    justify-content: space-evenly;
+}
+
+.karakterLabel {
+    text-align: center;
+}
+
+.karaktervalaszt {
+    justify-content: space-around;
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    padding: 5%;
+}
+
+.pichoose {
+    margin-bottom: 20px;
+    max-width: 200px;
+    height: fit-content;
+}
+
+
+#karakterFooter {
+    height: fit-content;
+    width: 100%;
+    padding: 10%;
+    text-align: center;
+}
+
+#karakterFooter button {
+    font-size: medium;
+    padding: 2%;    
+}
+
+.chooser {
     top: 20%;
     left: auto;
 }
-
  .circle {
     position: absolute;
-    top: 2%; /* Position at the top */
-    right: 2%; /* Position at the right */
-    width: 30px;
-    height: 30px;
-    background-color: rgba(106, 5, 57, 0.5);
-    color: red;
+    top: 2%;
+    right: 2%;
+    width: 40px;
+    height: 40px;
+    background-color: #8BD2F1;
+    color: #F8C9EB;
     border-radius: 50%;
+    
   }
-
+.circle > p { /*az idő számlálót betolja középüttre*/
+    margin-left: 37%;
+}
   .kenboard {
     background-color: skyblue;
   }

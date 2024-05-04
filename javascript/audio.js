@@ -1,6 +1,7 @@
 const player1Sound = document.getElementById('player1Sound');
 const player2Sound = document.getElementById('player2Sound');
 const mainTheme = document.getElementById('mortalTheme');
+
 const noi_hangok = [
   'audio/holgy/alm.wav',
   'audio/holgy/any.wav',
@@ -12,7 +13,6 @@ const noi_hangok = [
 
 const ferfi_hangok = [
   'audio/ferfi/akr.wav',
-  'audio/ferfi/besz.wav',
   'audio/ferfi/boh.wav',
   'audio/ferfi/gond.wav',
   'audio/ferfi/kiny.wav',
@@ -35,13 +35,12 @@ function playSoundEffect(player) {
 const newHang = document.getElementById('insultAudio');
 
 function randomEndSound(player) {
+  const ranIndex = Math.floor(Math.random() * 6);
   if(player === 'Barbie') {
-    const ranIndex = Math.floor(Math.random() * noi_hangok.length);
     const ranHang = noi_hangok[ranIndex];
     newHang.setAttribute('src',ranHang);
     newHang.play();
   } else {
-    const ranIndex = Math.floor(Math.random() * ferfi_hangok.length);
     const ranHang = ferfi_hangok[ranIndex];
     newHang.setAttribute('src',ranHang);
     newHang.play();

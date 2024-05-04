@@ -6,34 +6,35 @@ let playerOne;
 let playerTwo;
 let humanPlayer;
 let aiPlayer;
-const kenp = document.getElementById('kenpic').src; //kijelöli a kenpic id-nak a 'src' tulajdonságát
-const bpic = document.getElementById('barbiepic').src; //ugyanaz mint az efelettin
-const message = document.getElementById('mess'); //ugye van egy message id amivel kiirjuk hogy ki nyert stb
+let powerUpBarbie = true;
+let powerUpKen = true;
+let powerupAi = true;
+let powerupHuman = true;
+const kenp = document.getElementById('kenpic').src;
+const bpic = document.getElementById('barbiepic').src; 
+const message = document.getElementById('mess'); 
 
-
-//ezt ne is nézzétek elég messy rip XDDDDDDDDD  
+function appendNewPlayer(num) {
+    board[num] = currentPlayer;
+    const picapp = document.createElement('img'); 
+    picapp.className = 'gamepic'; 
+    picapp.src = currentPlayer === 'Barbie' ? bpic : kenp;
+    cells[num].appendChild(picapp); 
+    cells[num].classList.add('cellalter');
+}
 
 function makeMove(index) {
+    for (cel of cells) {cel.classList.remove('shake');}
     let mehet = !checkWinner() && running && checkFilled();
-    let ugyanaz = true;
+    let ugyanaz = cells[index].innerHTML === "" ? false : true;
 
-    if (cells[index].innerHTML === "") {
-        ugyanaz = false;
-    }
     if (mehet && !ugyanaz) { 
         counter(secundDisplay);
-        board[index] = currentPlayer;
-        const picapp = document.createElement('img'); 
-        /* hát én nem tom hogy ezt egyszerűbben is meglehet e csinálni
-        de én létrehozok egy img nevű elemet amibe belerakom a barbie vagy ken képek src tulajdonságát 
-        majd ezt rakom bele a kijelölt board-ba
-        */
-        picapp.className = 'gamepic'; 
-        picapp.src = currentPlayer === 'Barbie' ? bpic : kenp; //itt csak kijelölöm hogy ha barbie van soron akkor ő ha nem akkor a másik kép lesz kijelölve
-        cells[index].appendChild(picapp); //itt pedig berakom a cellába
-        for (cel of cells) {cel.className = "cell";}
-
+        appendNewPlayer(index);
        if (aiChoosen && mehet) {
+        if (checkThree(currentPlayer)) {
+            appendOtherPlayer(powerupHuman) ;   
+        } 
         aiNextMove();
         currentPlayer = humanPlayer;
         playSoundEffect(currentPlayer);
@@ -42,65 +43,45 @@ function makeMove(index) {
     }
 
         if (!checkFilled() && !checkWinner()) {
-            mainTheme.pause()
+            gameEnded();
             message.textContent = "Stalemate losers!";
-            running = false;
-            reButton.disabled = false;
-            formBackButton.disabled = false;
-            clearInterval(count);
-            secundDisplay.textContent = "";
         } 
         else if (checkWinner()) { 
-            mainTheme.pause()
-            mainTheme.currentTime = 0;
             message.textContent = `${currentPlayer === 'Barbie' ? `${barbieName} finished him!` : `${kenName} finished her!`}`;
             winner = currentPlayer
             updateScore(currentPlayer);
-            board = ['', '', '', '', '', '', '', '', ''];
-            running = false;
-            reButton.disabled = false;
-            formBackButton.disabled = false;
-            clearInterval(count);
-            secundDisplay.textContent = "";
+            gameEnded();
             randomEndSound(winner);
         }
         else if (running == true && checkFilled() && !ugyanaz && !aiChoosen){
+            if (checkThree(currentPlayer)) {
+                appendOtherPlayer((currentPlayer === 'Barbie' && powerUpBarbie) || (currentPlayer === 'Ken' && powerUpKen)) ;         
+            } 
             currentPlayer = currentPlayer === 'Barbie' ? 'Ken' : 'Barbie';
             message.textContent = finishThem(currentPlayer);
             playSoundEffect(currentPlayer);
-            boardColorChanger();    
+            boardColorChanger();   
         }
         else if (ugyanaz) {
             message.textContent = finishThem(currentPlayer);
-            console.log("Ez a lépés rossz volt -> " + (index+1));
-            cells[index].className = 'rossz';
+            cells[index].classList.add('shake');
         }
+        
     }
 
     function finishThem(player) {
-        if (namesAreDifferent) {
-            if (player === 'Barbie') {
-                return  `Finish him ${barbieName}!`;
-            } else {
-                return `Finish her ${kenName}!`;
-            }
-        }
-        else { 
-            if (player === 'Barbie') {
-                return `Finish him ${barbieName}!`;} 
-            else {return `Finish her ${kenName}!`;}}
+    return player === 'Barbie' ? `Finish him ${barbieName}!` : `Finish her ${kenName}!`
     }
 
-//ez csak átnézi hogy ha nem üres és mind a 3 winning kombóban ugyanolyan elem van slay tök fun
-//bár a holtverseny még nem működik de ezzel nem volt kedvem foglalkozni éppen sorry divak<3
-function checkWinner() { //nah ezt hajnalban agyaltam össze w3schoolal meg chatgpt-vel, nem tudom hogy perfekt e de jóez
-    for (const combo of winningCombos) {
+
+function checkWinner() {
+     for (const combo of winningCombos) {
         const symbols = combo.map(index => board[index]);
         const uniqueSymbols = new Set(symbols);
         if (uniqueSymbols.size === 1 && symbols[0] !== '') {
             return symbols[0]; 
         }
-}
+    }
     return null; 
 }
 
@@ -111,4 +92,18 @@ function checkFilled() {
         }
     }
     return false;
+}
+
+
+function gameEnded() {
+    mainTheme.pause()
+    mainTheme.currentTime = 0;
+    board = Array(selectedDifficulty).fill('');
+    running = false;
+    reButton.disabled = false;
+    formBackButton.disabled = false;
+    clearInterval(count);
+    secundDisplay.textContent = "";
+    powerUpBarbie = true;
+    powerUpKen = true;
 }

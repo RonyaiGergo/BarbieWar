@@ -1,13 +1,19 @@
 <!DOCTYPE html>
 <html lang = "en">
 <head>
-	<title>Barbie vs Ken Tic-Tac-Toe</title>
-	<meta charset = "utf-8">
+	<title>Barbie vs Ken Amőba</title>
+    <meta charset = "utf-8">
 	<meta name="description" content="A very spicy Tic-Tac-Toe in a queer style"> 
 	<meta name="keywords" content="Barbie, Ken, Tic-Tac-Toe, Game,Mortal Kombat,">
 	<meta name="author" content="Bús Emese, Bordás Dóra, Rónyai Gergő">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="icon" type="image/png" href="kepek/icon.png"/> <!--TODO-->
+    <meta property="og:title" content="Barbie vs Ken Tic-Tac-Toe">
+    <meta property="og:description" content="A very spicy Tic-Tac-Toe in a queer style">
+    <meta name="robots" content="index">
+    <link rel="icon" type="image/png" href="kepek/icon.png"/> <!--TODO-->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Antonio:wght@100..700&display=swap');
+    </style>
 	<link href="ttt.css" rel="stylesheet">
 </head>
 <body>
@@ -16,107 +22,101 @@
     <audio id="mortalTheme" src="audio/MORTAKOMBAT.m4a"></audio>
     <audio id="insultAudio"></audio>
 
-<div class="bigdiv">  
+<div class="bigdiv">    
+    <div>
         <!--Beraktam mindent egy nagy divbe ahol flex-direction: column van
         így a header-wrapper-footer egymás alatt van
         a wrapperben pedig minden egymás melett van mert ott row wrap van
         hope that help! -->
+    </div>
         <header class="header">
-            <img src="kepek/barbie.jpg" alt="barbie" id="barbiepic">
+            <img src="kepek/barbie.jpg" alt="barbie" id="barbiepic" >
             <img src="kepek/ken.PNG" alt="ken" id="kenpic">
             <p id="atee"> THE VERY FIRST SIN WAS A WOMAN WHO ATE!</p>
         </header>
 
         <div class="wrapper">
             <div class="main" id="board">
+
             </div>
 
-        <section class="side leftSide" id="leftSide">  <!--Please emese help us save us töröld ki a pre cuccokat 
-                                            PRESIDENT TRUMP PLEASE SAVE US (ha nem ismered a memet guglizd ki tbh fun)-->
-            <h1>Game mechanics</h1>
-            <pre> Choose your gamestyle
-First select the size
-            </pre>
+        <section class="side leftSide" id="leftSide">
+            <h1>Beállítások</h1>
+            <h2>Táblák</h2><div class="anim" id="tableTooltip">
+                <span class="tooltip" data-tooltip="A 3x3-nál nagyobb pályákon lehetőséged van megszerezni random módon az ellenség egyik helyét!">?</span>
+                </div>
+            <p class="terkozolni">
+            Válassz méretet! (hmm)
+            </p>
 
             <form id="difficultyForm">
                 <input type="radio" id="easy" name="difficulty" value=9 checked>
-                <label for="easy">Small - 3x3</label><br>
+                <label for="easy">Kicsi - 3x3</label><br>
         
                 <input type="radio" id="medium" name="difficulty" value=25>
-                <label for="medium">Medium - 5x5</label><br>
+                <label for="medium">Közepes - 5x5</label><br>
         
                 <input type="radio" id="hard" name="difficulty" value=36>
-                <label for="hard">Large - 6x6</label><br>
-                
-                <pre>
-
-                </pre>
-                <h2>Speed</h2>
-                <pre>
-
-If you want a challenge
-play faster</pre>
-                <pre>
-
-                </pre>
+                <label for="hard">Nagy - 6x6</label><br>
+                <h2>Sebesség</h2><div class="anim" id="speedTooltip">
+                    <span class="tooltip" data-tooltip="Ha lejár az óra az ellenséged nyer, vigyázz hogy, elég gyors legyél!">?</span>
+                    </div>
+                <p> Hogyha felpörgetnéd a játékot</p>
                 <input type="radio" id="slowSpeed" name="speed" value=60 >
-                <label for="slowSpeed">Slow Game (60 sec)</label><br>
+                <label for="slowSpeed">Lassú (60 mp)</label><br>
 
                 <input type="radio" id="normalSpeed" name="speed" value=10 checked>
-                <label for="normalSpeed">Normal Game (10 sec)</label><br>
+                <label for="normalSpeed">Normális (10 mp)</label><br>
 
                 <input type="radio" id="fastSpeed" name="speed" value=3>
-                <label for="fastSpeed">Fast Game (3 sec)</label><br>
-                <pre>
-
-                </pre>
-                <h2>Enemy</h2>
-                <pre>
-
-When you're lonely
-play against AI</pre>
-<pre>
-
-</pre>
+                <label for="fastSpeed">Gyors (3 mp)</label><br>
+                <h2>Ellenség</h2><div class="anim" id="aiTooltip">
+                    <span class="tooltip" data-tooltip="Nagyobb pályákon lehet lassabb!">?</span>
+                    </div>
+                <p>Hogyha egyedül vagy mint a kislábujjam, játszhatsz AI ellen is!</p>
                 <input type="radio" id="humanGame" name="aiChooser" value=1 checked>
-                <label for="humanGame">Against Human</label><br>       
+                <label for="humanGame">Ember ellen</label><br>       
                 <input type="radio" id="aiGame" name="aiChooser" value=2>
-                <label for="aiGame">Against AI</label><br>
-                <pre>
-
-                </pre>
-                <button type="submit" id="startButton">Start New Game</button>
+                <label for="aiGame">AI ellen</label><br>
+                <button type="submit" id="startButton">Új játék indítása</button>
             </form>
         </section>
 
-        <section class="side rightSide" id="scoreBoard">
-            <h1>Scoreboard</h1>
+        <section class="side rightSide eltunteto" id="scoreBoard">
+            <h1>Ranglista</h1>
             <h2>Barbie</h2>
             <p id="barbieScoreCount">0</p> <br>
             <h2>Ken</h2>
             <p id="kenScoreCount">0</p>
-            <p id="mess">Who will win?</p>
-            <button type="button" id="replayButton" disabled>Next Round</button>
-            <button type="button" id="FormBack">Start Over</button>
+            <p id="mess">Ki fog nyerni?</p>
+            <button type="button" id="replayButton" disabled>Következő kör</button>
+            <button type="button" id="FormBack">Új játék</button>
             
         </section>
-    </div>  <!--Itt a wrappert zárjuk le-->
 
+    </div>  <!--Itt a wrappert zárjuk le-->
         <footer class="footer">
-            <h1>Footer</h1>
+            <h1>✨Extrák✨</h1>
+                <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/1w0HoUZIbzXOMowRRojwd8?utm_source=generator&theme=0" 
+                width="50%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                loading="lazy"></iframe>
+
+                <button id="btn">Oldal lenémítása</button> <!--ennek a scriptje is a checkbox.js-ben van-->
             <!--TODO:Elég ha csinálsz nekem gombokat amivel ki be lehet kapcsolni a zenéket,
             a logikát megoldom, viszont elég ha készítesz egy bool változót és akárhol lefut a muzsika ott csak rakj egy if statement-->
-            </footer>
+        </footer>
 </div>  <!--Itt a kreatív nevü bigdiv vége ez az egész html bodynk-->
-        
+   <script src="javascript/main.js"></script>  
    <script src="javascript/game.js"></script>
-   <script src="javascript/main.js"></script>
    <script src="javascript/winningmoves.js"></script>
    <script src="javascript/scoreboard.js"></script>
    <script src="javascript/gameplaylogic.js"></script>
    <script src="javascript/gamecounter.js"></script> 
    <script src="javascript/ai-smallerversion.js"></script> 
+   <script src="javascript/heuristic-evaluation.js"></script>
    <script src="javascript/audio.js"></script>
+   <script src="javascript/powerups.js"></script>
+   <script src="javascript/checkbox.js"></script>
 
 </body>
 </html>
