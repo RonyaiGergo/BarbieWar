@@ -49,7 +49,7 @@ const musics = document.querySelectorAll('audio');
 
 document.getElementById('btn').addEventListener('click', function () {
     soundState = !soundState; // Az állapot váltása
-
+    console.log(soundState + "  slaayed?")
     musics.forEach(music => {
         music.currentTime = 0; // Zenék visszaállítása az elejére
         music.muted = !soundState; // A zenék hangosak lesznek, ha soundState false

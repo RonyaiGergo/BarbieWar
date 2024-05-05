@@ -52,7 +52,7 @@
     const karakterHead = document.createElement('div');
     karakterHead.setAttribute('id','karakterHead');
     const karakterText = document.createElement('p');
-    karakterText.innerHTML = "Válaszd ki a kezdőjátékos ikonját!<br>Végig a kiválasztott karakterrel fogsz játszani ha az AI az ellenfeled";
+    karakterText.innerHTML = "Válaszd ki a kezdőjátékos ikonját!<br>(Végig a kiválasztott karakterrel fogsz játszani ha az AI az ellenfeled)";
     karakterHead.appendChild(karakterText);
     const karakterMain = document.createElement('div');
     karakterMain.setAttribute('id','karakterMain');
@@ -89,25 +89,36 @@
     
 nameFormSubmitter.addEventListener('click',function(event){
     event.preventDefault();
-    console.log('sdlayerf');
     if (!characterChoosen) {
         alert('Válassz ki egy játékost kérlek!');
         return;
     }
-    if (barbieNameInput.value !== barHolder && kenNameInput.value !== kenHolder) {
+    if (barbieNameInput.value != "" && kenNameInput.value != "") {
         barbieName = barbieNameInput.value;
         kenName = kenNameInput.value;
         cover.removeChild(nameForm);
-        barbieLabel.innerHTML = "A barbie neve: " + barbieName;
-        kenLabel.innerHTML = "A ken neve: " + kenName;
+        namesAreDifferent = true;
+        ellenorzo();
+    } else if (barbieNameInput.value != "") {
+        barbieName = barbieNameInput.value;
+        kenName = "Ken";
+        cover.removeChild(nameForm);
+        namesAreDifferent = true;
+        ellenorzo();   
+    } else if (kenNameInput.value != "") {
+        barbieName = "Barbie";
+        kenName = kenNameInput.value;
+        cover.removeChild(nameForm);
         namesAreDifferent = true;
         ellenorzo();
     }
-    else { barbieName = barbieNameInput.value;
-        cover.removeChild(nameForm);
+    else { 
         barbieName = "Barbie";
-        kenName  = "Ken";
-        alert('Rossz volt az inputod!\nKérlek próbáld újra írni a neveket!')}  
+        kenName = "Ken";
+        cover.removeChild(nameForm);
+        ellenorzo(); 
+    }
+
 })
 
 
@@ -125,8 +136,8 @@ function choosePlayer(difficulty) {
     cover.appendChild(nameForm);
 
     barbieChooser.addEventListener("click",function(){
-        barbieChooser.style.border = "2px solid red";
-        kenChooser.style.border = "none";
+        bb.style.border = "2px solid red";
+        kk.removeAttribute('style');
         currentPlayer = 'Barbie';
         playerOne = 'Barbie';
         playerTwo = 'Ken';
@@ -134,8 +145,8 @@ function choosePlayer(difficulty) {
         console.log(currentPlayer + " : jelenlegi player")
     });
     kenChooser.addEventListener("click",function(){
-        kenChooser.style.border = "2px solid red";
-        barbieChooser.style.border = "none";
+        kk.style.border = "2px solid red";
+        bb.style.border = "none";
         currentPlayer = 'Ken';
         playerOne = 'Ken';
         playerTwo = 'Barbie';
@@ -152,11 +163,7 @@ function ellenorzo() {
     winnerMoves(Math.sqrt(selectedDifficulty));
     kontener.classList = `main board${Math.sqrt(selectedDifficulty)}`;
     gamestart(selectedDifficulty);
-    if (!namesAreDifferent) {
-        barbieName = 'Barbie';
-        kenName = 'Ken';
-    }
-    message.textContent = "Choosen : " + `${currentPlayer === 'Barbie' ? `${barbieName}!` : `${kenName}!`}`;
+    message.textContent = "Kiválasztva : " + `${currentPlayer === 'Barbie' ? `${barbieName}!` : `${kenName}`}`;
 }
 
 

@@ -44,7 +44,7 @@ function makeMove(index) {
 
         if (!checkFilled() && !checkWinner()) {
             gameEnded();
-            message.textContent = "Stalemate losers!";
+            message.textContent = "Lúzerek vagytok mindketten!";
         } 
         else if (checkWinner()) { 
             message.textContent = `${currentPlayer === 'Barbie' ? `${barbieName} finished him!` : `${kenName} finished her!`}`;

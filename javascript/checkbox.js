@@ -4,13 +4,14 @@ const freakyButton = document.getElementById('btn');
 let rights;
 let bottoms;
 
+
 freakyButton.addEventListener('mouseover', function () {
-    rights = `${Math.ceil(Math.random() * 40)}%`
+
+    rights = `${Math.ceil(Math.random() * 46)}%`
     freakyButton.style.right = rights;
-    bottoms = `${Math.ceil(Math.random() * 40) -120}%`
-    freakyButton.style.bottom = bottoms;
+    bottoms = `${Math.ceil(Math.random() * 40) + 150}%`
+    freakyButton.style.top = bottoms;
 });
 freakyButton.addEventListener('click', function () {
     alert('Az oldal lenémítva! :)')
 })
-
